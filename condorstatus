@@ -1,0 +1,3 @@
+#!/bin/bash
+
+condor_status -avail -pool atlfarm014.mi.infn.it

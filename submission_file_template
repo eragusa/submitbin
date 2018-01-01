@@ -1,0 +1,27 @@
+###############################
+#                             #
+# Submission_file for phantom #
+#                             #
+###############################
+
+Universe     = vanilla
+Executable   = phantom
+Args         = PREFIX.in
+Requirements = (TARGET.OpSysMajorVer == 6) &&  (TARGET.Machine =!= "proof-05.mi.infn.it")
+Environment  = OMP_NUM_THREADS=22;OMP_STACKSIZE=512M;OMP_SCHEDULE=dynamic;LD_LIBRARY_PATH=.
+
+transfer_input_files    = PREFIX.discparams,\
+                          PREFIX.in,\
+                          PREFIX_00000.tmp,\
+
+when_to_transfer_output = ON_EXIT_OR_EVICT
+
+request_cpus = 22
+
+Error   = err.$(Cluster).$(Process)
+Output  = out.$(Cluster).$(Process)
+Log     = phantom.log.$(Cluster).$(Process)
+
+Queue
+
+

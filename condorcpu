@@ -1,0 +1,3 @@
+#!/bin/bash
+
+condor_status -avail -pool atlfarm014.mi.infn.it -autoformat:tlh  Name State Activity SlotType SlotTypeID Memory Cpus TotalCpus

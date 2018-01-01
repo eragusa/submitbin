@@ -1,0 +1,5 @@
+#!/bin/bash
+
+ condor_q -format '%f ' ClusterId  -format '%s \n' Cmd
+
+
