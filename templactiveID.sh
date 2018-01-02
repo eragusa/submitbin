@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROCID=/home/ragusa/ProcID
+PROCID=path_subst
 
 $PROCID/daemonnohup.sh
 less $PROCID/activenohupID.txt 

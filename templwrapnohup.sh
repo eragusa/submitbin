@@ -2,7 +2,7 @@
 
 PWD=`pwd`
 ARG1=$@
-PROCID=/home/ragusa/ProcID
+PROCID=path_subst
 
 echo "`date`: $$ $PWD $ARG1"  >> $HOME/simulazioni/procID/activenohupID.txt 
 nohup $ARG1 > "$ARG1.wrapout"
