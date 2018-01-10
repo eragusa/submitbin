@@ -1,0 +1,42 @@
+# input file for dustydisc setup routine
+
+# resolution
+                  np =      750000    ! number of gas particles
+
+# units
+               udist =   1.496E+13    ! distance unit in cm
+               umass =   1.989E+33    ! mass unit in g
+
+# options for central star
+              star_m =       1.700    ! star mass
+           accradius =       1.000    ! star accretion radius
+
+# options for gas accretion disc
+                R_in =       1.000    ! inner radius
+               R_out =        150.    ! outer radius in gas
+         iprofilegas =           0    ! set gas surface density profile (0=power-law, 1=tapered power-law)
+            mass_set =           0    ! how to set gas disc mass (0=disc mass, 1=surface density, 2=Toomre Q (not yet implemented))
+              disc_m =   8.000E-02    ! disc mass in gas
+              pindex =       0.500    ! p index
+              qindex =       0.44    ! q index
+             alphaSS =       ALPHA    ! desired alphaSS
+                xinc =       0.000    ! inclination angle
+                 H_R =       0.072    ! H/R at R=Rin
+          binary_set =           0    ! set the binary? (0=no,1=yes)
+          setplanets =           1    ! add planets? (0=no,1=yes)
+       icentralforce =           0    ! central mass force choice (0=sink,1=external force)
+
+# options for dust accretion disc
+   dust_to_gas_ratio =       0.010    ! dust to gas ratio
+    profile_set_dust =           0    ! how to set dust density profile (0=equal to gas, 1=custom)
+        grainsizeinp =        SIZE    ! grain size (in cm)
+        graindensinp =       1.000    ! intrinsic grain density (in g/cm^3)
+
+# set planets
+            nplanets =           1    ! number of planets
+
+# planet:1
+            mplanet1 =       MASSR    ! planet mass (in Jupiter mass)
+            rplanet1 =       SEMAX    ! planet distance from star
+         inclplanet1 =       0.000    ! planet inclination [deg] with respect to xy plane
+         accrplanet1 =       0.250    ! planet radius
