@@ -130,6 +130,16 @@ Doing this from your home directory allows you not to edit the \$PATH environmen
 
 This repository is public, do whatever you want with the scripts but please if you make some modifications be sure they are not breaking anything before pushing them.
 
+Keep in mind that the submitbin folder contains the most updated version of the source files producing this pdf. You might wish to compile the pdf going in the folder HowtoTeXGuide and typing:
+\begin{verbatim}
+pdflatex tutorialSim.tex
+bibtex tuttorialSim.aux
+pdflatex tutorialSim.tex
+pdflatex tutorialSim.tex
+\end{verbatim}
+the repeated commands are necessary in order to have all the internal label-references and bibliography set properly.
+
+
 \section{Setting up a PHANTOM simulation}
 
 You can read this first section to understand a couple of important issues regarding the compilation of the executables, if you are not interested and you want directly to run a simulation, you can directly jump to Section \ref{howtorun}.
