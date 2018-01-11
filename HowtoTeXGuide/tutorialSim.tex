@@ -312,6 +312,8 @@ Log     = phantom.log.$(Cluster).$(Process)
 
 Queue
 \end{verbatim}
+\textbf{IMPORTANT:} There have been few modifications to the name patterns of the files (e.g., the discparams file is now produced with a different names depending on the options that you choose when producing your first dump). If your submission fail, it could be that you are not transferring the correct files. If this happens, you need to edit the template in order to include in the file transfer\_input\_files the correct files.
+
 The universe is a setting required by Condor for the type submission, the vanilla one is the less specific (as far as I could understand). The requirements require an OS equal or more recent that CentOS 7, and not to run on the machine 5 of the proof cluster (which gave me some problems in the past). OMP\_NUM\_THREADS is the number of OMP threads on which your simulation is parallelized (it should be equal to the number of CPUs you are requiring). Transfer\_input\_files are the files that has to be transfered on the host machine in addition to the executable (the .in file, the .discparams and the starting dump). \textbf{Be careful:} if your simulation is starting from a dump different from the 00000.tmp one it needs to be edited manually (unless you are using the submit.sh script I will describe below).
 
 Now you submit your job using:
