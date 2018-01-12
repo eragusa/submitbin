@@ -4,12 +4,17 @@ PROCID=$HOME/ProcID
 SUBMITDIR=$HOME/submitbin
 
 mkdir $PROCID
-cp $SUBMITDIR/daemonnohup.sh $PROCID
 touch $PROCID/activenohupID.txt
 echo $PROCID
+
 sed 's,path_subst,'$PROCID',' < $SUBMITDIR/templwrapnohup.sh > $SUBMITDIR/wrapnohup.sh
 sed 's,path_subst,'$PROCID',' < $SUBMITDIR/templactiveID.sh > $SUBMITDIR/activeID.sh
+sed 's,path_subst,'$PROCID',' < $SUBMITDIR/templdaemonnohup.sh> $SUBMITDIR/daemonnohup.sh
+chmod u+x $SUBMITDIR/wrapnohup.sh
+chmod u+x $SUBMITDIR/activeID.sh
+chmod u+x $SUBMITDIR/daemonnohup.sh
 
+cp $SUBMITDIR/daemonnohup.sh $PROCID 
 
 ########wrtiting the README##########
 
@@ -30,7 +35,7 @@ wrapnohup.sh PROGRAMNAME &
 Aggiornamento
 
 ora wrapnohup.sh fa le stesse cose ma senza bisogno del demone.
-Tuttavia il demone è ccomunque utile perchè se processi chiusi male non aggiornano la lista.
+Tuttavia il demone è comunque utile perchè se processi chiusi male non aggiornano la lista.
 Per aggiornare la lista basta digitare:
 
 ./daemonnohup.sh
