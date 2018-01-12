@@ -1,5 +1,5 @@
 #!/bin/bash
 
- condor_history  -format '%f ' ClusterId  -format '%s ' Cmd -format '%s \n' JobStatus
+ condor_history  -format '%f ' ClusterId  -format '%s ' Cmd -format '%s \n' JobStatus|less
 
 

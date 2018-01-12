@@ -1,3 +1,4 @@
 #!/bin/bash
+echo "NAME MEMORY CPUS DISK"
+condor_status -pool "superpool-cm" -autoformat Name Memory Cpus Disk
 
-condor_q -pool "atlfarm014.mi.infn.it" -global

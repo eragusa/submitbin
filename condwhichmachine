@@ -1,4 +1,8 @@
-#!/bin/bash
+#!/bin/bash -x
 
- condor_history  -format '%f ' ClusterId  -format '%s ' LastRemoteHost -format '%s ' LastRemotePool -format '%f\n' RemoteWallClockTime 
+
+NAME=$USER
+
+condor_status -pool "superpool-cm" -constraint 'RemoteUser == "'$NAME@gaspare.fisica.unimi.it'"'
+
 

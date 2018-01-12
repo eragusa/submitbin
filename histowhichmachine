@@ -1,0 +1,3 @@
+#!/bin/bash
+
+condor_history  -format '%f ' ClusterId  -format '%s ' LastRemoteHost -format '%s ' LastRemotePool -format '%f\n' RemoteWallClockTime|less
