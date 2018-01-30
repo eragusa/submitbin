@@ -7,7 +7,7 @@
 Universe     = vanilla
 Executable   = phantom
 Args         = PREFIX.in
-Requirements = (TARGET.OpSysMajorVer == 7) &&  (TARGET.Machine =!= "proof-05.mi.infn.it")
+Requirements = (TARGET.OpSysMajorVer == 7)
 Environment  = OMP_NUM_THREADS=16;OMP_STACKSIZE=512M;OMP_SCHEDULE=dynamic;LD_LIBRARY_PATH=.
 
 transfer_input_files    = PREFIX.discparams,\
