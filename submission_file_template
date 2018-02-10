@@ -10,8 +10,7 @@ Args         = PREFIX.in
 Requirements = (TARGET.OpSysMajorVer == 7)
 Environment  = OMP_NUM_THREADS=16;OMP_STACKSIZE=512M;OMP_SCHEDULE=dynamic;LD_LIBRARY_PATH=.
 
-transfer_input_files    = PREFIX.discparams,\
-                          PREFIX.in,\
+transfer_input_files    = PREFIX.in,\
                           PREFIX_00000.tmp,\
 
 when_to_transfer_output = ON_EXIT_OR_EVICT
