@@ -52,7 +52,21 @@ The first thing you need is an account on the machine of the milan astrophysics 
 \begin{verbatim}
 ssh -XY username@virgo.fisica.unimi.it
 \end{verbatim}
-The -XY option allows and forces the forwarding of graphical windows\footnote{Notice that not being able to open any window despite the -XY options is the classical symptom that for some reason you are not able to write in the Xauth file on your home directory: typically this occurs when you run out of disc space (both if you exceed your quota or the machine disc is completely full: \textbf{df -h}, look for the percentage of usage of the home dir).} . If you want to use gedit or other programs whose output is prompted on a graphical window (for example if you want to make some plots) it is required. 
+The -XY option allows and forces the forwarding of graphic windows. If you want to use gedit or other programs whose output is prompted on a graphical window (for example if you want to make some plots, or simply if you use a graphic text editor as gedit) it is required. 
+
+\subsection{What should I do if I am not able to open graphic windows?}
+
+There might be two main reasons why you are not able to open graphic windows: 
+\begin{itemize}
+\item First you have not set properly the X11 forwarding on your laptop: to do so, create the file ~/.ssh/config and add the following lines
+\begin{verbatim}
+Host *
+  ForwardAgent yes
+  ForwardX11 yes
+\end{verbatim}
+
+\item Your account or (much worse) the machine has run out of available space on the disc: not being able to open any window despite the -XY options is the classical symptom that for some reason you are not able to write in the Xauth file on your home directory: typically this occurs when you run out of disc space (both if you exceed your quota or the machine disc is completely full: \textbf{df -h}, look for the percentage of usage of the home dir).
+\end{itemize}
 
 \subsection{User administration}
 If you still do not have an account, you should ask someone with administrator privileges to type:
