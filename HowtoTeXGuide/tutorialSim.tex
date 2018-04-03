@@ -221,6 +221,20 @@ make setup
 make analysis
 \end{verbatim}
 to have the three main executables (many other executables can be compiled for different purposes). The local Makefile copies the executables in the folder where you type make. 
+It might happen that if you are trying to compile the executables with a large number of particles ($N_{\rm part}\gtrsim 2.5\times 10^6$), you might need to set 
+\begin{verbatim}
+ulimit -s unlimited
+\end{verbatim}
+otherwise when executing it will try to use an amount of stack memory larger than the default allowed to the user.
+Furthermore, if you are trying to compile with a very very large number of particles ($N_{\rm part}\gtrsim 10^7$) you might need to edit the $-mcmodel$ flag in the FFLAGS variable under the gfortran \$SYSTEM setting of the phantom/build/Makefile as follows
+\begin{verbatim}
+ ifeq ($(SYSTEM), gfortran)
+     include Makefile_defaults_gfortran
+ ifneq ($(UNAME), Darwin)
+    FFLAGS+= -mcmodel=large
+ endif
+ endif
+\end{verbatim}
 
 We now create the first dump of the simulation using
 \begin{verbatim}
