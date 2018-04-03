@@ -1,1 +1,10 @@
 These are a set of scripts that allow the automatized submission of PHANTOM jobs using HTCondor
+To create the pdf guide from the .tex file type
+
+pdflatex tutorialSim.tex
+bibtex tutorialSim.aux
+pdflatex tutorialSim.tex
+pdflatex tutorialSim.tex
+
+to open the pdf from the terminal you can use 
+evince tutorialSim.pdf &
