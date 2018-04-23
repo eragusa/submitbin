@@ -531,6 +531,31 @@ asplash angm00010
 \end{verbatim}
 will prompt an interactive menu (the a in asplash refer to ASCII file reader) allowing you to make column vs column plots.
 
+\subsection{Using python for analysis}
+
+You can create the .so dynamic library to import particles positions and velocities in a python script.
+\begin{verbatim}
+make pyanalysis
+\end{verbatim}
+This will compile the class PhantomAnalysis. \textbf{NB:} to create a dynamic library the flag -static must be disabled! If you get some error, it is likely that this is the reason. I recall that you have probably added the flag -static, since not on all the machines of the farm the required libraries are present. Check that the flag -static in the build/Makefile\_defaults\_gfortran is not there.
+Now you can include in your python script the class using:
+\begin{verbatim}
+from libanalysis import PhantomAnalysis as pa
+\end{verbatim}
+Then, you can load the dump you want using:
+\begin{verbatim}
+dump = pa('nameofyourfile_00000')
+\end{verbatim}
+In my specific case, I experienced also some problems since the script tries to load also the variable for the internal energy, but since I was running a locally isothermal simulation it was not able to find it. Not sure I did something wrong, but I solved it commenting the following line in the file phantom/scripts/pyphantom/phantomanalysis.py:
+\begin{verbatim}
+#self.utherm = self.get_part_u(npart)/(udist**2/utime**2)
+\end{verbatim}
+You can access to the values of the variables using a syntax of the type:
+\begin{verbatim}
+dump.xyzh
+\end{verbatim}
+If you are using ipython, you can see a list of the variables typing "dump." and then hitting the TAB key to complete the command. A list of the variables will appear.
+
 \section{scripts}
 
 \subsection{Spanning the parameter space}\label{pspacespan}
