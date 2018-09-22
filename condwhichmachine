@@ -2,7 +2,8 @@
 
 
 NAME=$USER
+HOSTNAME=`hostname`
 
-condor_status -pool "superpool-cm" -constraint 'RemoteUser == "'$NAME@gaspare.fisica.unimi.it'"'
+condor_status -pool "superpool-cm" -constraint 'RemoteUser == "'$NAME@$HOSTNAME'"'
 
 
