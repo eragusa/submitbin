@@ -34,7 +34,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \title{Guide for future users of the Milan computational cluster (including some administrator tricks)}
-\author{Enrico Ragusa}
+\author{Enrico Ragusa, Benedetta Veronesi}
 \begin{document}
 
 \maketitle
@@ -360,10 +360,15 @@ To remove the job from the queue type:
 \begin{verbatim}
 condor_rm ClusterID
 \end{verbatim}
+It might occur that you job has too stringent requirements, e.g. you are requiring too many cores or an OS that is not common among the machines in the pool. In that case your job might remain Idle in the queue for longer than you expect. Whenever this happens, you might find it helpful to type
+\begin{verbatim}
+condor_q -better-analyze ClusterID
+\end{verbatim}
+this will prompt the number of machines in the pool satisfying each specific requirement.
 
 This basic approach to the job submission has the following problems: first, you have no access to the intermediate dumps until the simulation end. Second, if your simulation takes 2 weeks to run, the chances that your job is evicted by someone with higher priority are extremely high; every time you get evicted your simulation is restarted from the beginning. Even though sometimes the partial output is copied in the /var/lib/condor/spool folder, this requires a manual restart: copying back in the proper folder all the output and editing by hand all the files for the next resubmission. You can also leave your simulation running again from the beginning implying obviously that your simulation might incur again in an eviction....As a result, your simulation will last forever.
 
-The best workaround to this is to break the simulation in smaller and shorter jobs. Doing this manually is impossible, it would require a huge waste of time from you to constantly check the status of your simulations. Luckily, \textsc{virgo} is always awake and aware of what's going on, so we can use a bash script to do this for us as I am going to describe in the following dedicated Section.
+The best workaround to this is to split the simulation in smaller and shorter jobs. Doing this manually is impossible, it would require a huge waste of time from you to constantly check the status of your simulations. Luckily, \textsc{virgo} is always awake and aware of what's going on, so we can use a bash script to do this for us as I am going to describe in the following dedicated Section.
 
 \subsubsection{Automatic job re-submission}
 
