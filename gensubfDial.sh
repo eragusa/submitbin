@@ -1,7 +1,17 @@
-#!/bin/bash
+#!/bin/bash 
 
 NAME=$1
-JNAME=`pwd|awk -F '/' 'NR==1{print $NF}'`
+JNAME=$NAME
+CORES=$2
+TIME=$3
+NPAR=3
 
-sed 's/NAMEFILE/'$NAME'/' ~/submitbin/submission_file_template_Dial.pbs| sed 's/JOBNAME/'$JNAME'/' > subfile.pbs
+if [ "$#" -lt $NPAR ]; then
 
+  CORES=16;
+  TIME=24;
+  sed 's/NAMEFILE/'$NAME'/' ~/submitbin/submission_file_template_Dial.pbs| sed 's/JOBNAME/'$JNAME'/'|sed 's/TIME/'$TIME'/'|sed 's/CORES/'$CORES'/' > subfile.pbs
+
+fi
+
+sed 's/NAMEFILE/'$NAME'/' ~/submitbin/submission_file_template_Dial.pbs| sed 's/JOBNAME/'$JNAME'/'|sed 's/TIME/'$TIME'/'|sed 's/CORES/'$CORES'/' 

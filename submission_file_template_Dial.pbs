@@ -1,14 +1,14 @@
 #!/bin/bash
 ## PBS Job Submission Script, created by "make qscript" Fri May 18 01:17:17 BST 2018
 #PBS -A dp005
-#PBS -l nodes=1:ppn=16
+#PBS -l nodes=1:ppn=CORES
 #PBS -N JOBNAME
 #PBS -o NAMEFILE.in.pbsout
 #PBS -j oe
 #PBS -m e
 #PBS -M enrico.ragusa@leicester.ac.uk
-#PBS -l walltime=120:00:00
-#PBS -l mem=16G
+#PBS -l walltime=TIME:00:00
+#PBS -l mem=32G
 ## phantom jobs can be restarted:
 #PBS -r y
 
@@ -25,7 +25,7 @@ echo Directory is `pwd`
 module load intel/compilers/18
 
 export OMP_SCHEDULE="dynamic"
-export OMP_NUM_THREADS=36
+export OMP_NUM_THREADS=CORES
 export OMP_STACKSIZE=1024m
 ulimit -s unlimited
 

@@ -1,0 +1,4 @@
+#/bin/bash
+
+showq -u dc-ragu1
+qstat -u dc-ragu1
