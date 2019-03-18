@@ -1,0 +1,4 @@
+#/bin/bash
+
+showq -u er198
+qstat -u er198
