@@ -1,4 +1,6 @@
 #/bin/bash
 
-showq -u dc-ragu1
-qstat -u dc-ragu1
+USER=`whoami`
+
+showq -u $USER
+qstat -u $USER
