@@ -63,17 +63,17 @@
 
 
 \title{Guide for future users of the Milan computational cluster (including some administrator tricks)}
-\author{Enrico Ragusa and Benedetta Veronesi\footnote{benedetta.veronesi@unimi.it}}
+\author{Enrico Ragusa\footnote{enrico.ragusa@leicester.ac.uk} and Benedetta Veronesi\footnote{benedetta.veronesi@unimi.it}}
 \begin{document}
 
 \maketitle
 %\tableofcontents
 
-This guide is the fruit of the experience I gained during my master thesis and two PhD years at the university of Milan. I will try to include here most of the information needed by any user or not so experienced administrator in order to run numerical simulations, setting the environment and some useful tricks and scripts for submitting jobs using the queue manager HTCondor. 
+This guide is the fruit of the experience I gained during my master thesis and two PhD years at the university of Milan. I will try to include here most of the information needed by any user or not so experienced administrator in order to run numerical simulations, setting the environment and some useful tricks and scripts for submitting jobs using the queue manager HTCondor.
 
 I do not expect that the content of this guide represents the best or at least proper way to do things. Most of this are self-thaught notions that I learned as magic spells on the internet. My philosophy of life regarding computers is ``If it works, do not make further questions...''. It might seem to be a bit naive or superficial as an approach, however I realized that any time you invest to fix some issues is worth the effort, the rest is wasted: so my personal opinion is that it is better to understand how to fix one specific problem than learning everything is required to do it in the most efficient way (unless doing it efficiently is the core of the problem). So please don't blame me if the solution to some issues appears as a ridiculous approach to your eyes or if you could find a much faster and elegant way.
 
-Finally please email me if something is not completely clear or simply it does not work as it should. My home directory reflects quite well my attitude toward chaos in real life, i.e. it's a complete mess, perfectly representing the concept of geological disorder: what is older is also somewhere deeper. It might be that during the reordering I did to write this guide something went missing.  
+Finally please email me if something is not completely clear or simply it does not work as it should. My home directory reflects quite well my attitude toward chaos in real life, i.e. it's a complete mess, perfectly representing the concept of geological disorder: what is older is also somewhere deeper. It might be that during the reordering I did to write this guide something went missing.
 
 \section{Getting started}
 
@@ -81,11 +81,11 @@ The first thing you need is an account on the machine of the Milan astrophysics 
 \begin{verbatim}
 ssh -XY username@virgo.fisica.unimi.it
 \end{verbatim}
-The -XY option allows and forces the forwarding of graphic windows. If you want to use gedit or other programs whose output is prompted on a graphical window (for example if you want to make some plots, or simply if you use a graphic text editor as gedit) it is required. 
+The -XY option allows and forces the forwarding of graphic windows. If you want to use gedit or other programs whose output is prompted on a graphical window (for example if you want to make some plots, or simply if you use a graphic text editor as gedit) it is required.
 
 \subsection{What should I do if I am not able to open graphic windows?}
 
-There might be two main reasons why you are not able to open graphic windows: 
+There might be two main reasons why you are not able to open graphic windows:
 \begin{itemize}
 \item First you have not set properly the X11 forwarding on your laptop: to do so, create the file ~/.ssh/config and add the following lines
 \begin{verbatim}
@@ -116,10 +116,10 @@ chmod u+x /etc/profile.d/custom.sh
 \end{verbatim}
 the content of the custom.sh file is currently
 \begin{verbatim}
- #!/bin/bash 
- 
+ #!/bin/bash
+
  for group in `id -Gn`; do
-     if [ "$group" = "ProtoPl" ] 
+     if [ "$group" = "ProtoPl" ]
          then
           export LESS=JSiM
           export SYSTEM=gfortran
@@ -142,7 +142,7 @@ grep <name> /etc/passwd
 \end{verbatim}
 add an existing user to a group
 \begin{verbatim}
-usermod -G <groupname> <Name> -a 
+usermod -G <groupname> <Name> -a
 \end{verbatim}
 \textbf{NB: the -a option append the group to the existing otherwise you lose all the previous ones.}
 change ownership of a file\footnote{Important to notice that users are part of the group named with their name, so that the ownership of a random user's file is $\langle$user$\rangle$:$\langle$user$\rangle$.}
@@ -159,62 +159,62 @@ If you want to see how many space is still free on Virgo, you can type this
 \begin{verbatim}
 df -h
 \end{verbatim}
-where the important stuff is in \textbf{/dev/md4} i.e. the \textbf{/home} directory of Virgo, and \textbf{/dev/md5} i.e \textbf{/data}, a directory where you can copy files/directories related to closed papers. If you notice that the /home is $99\%$, chech your usage of space on disc. If you are using not so many GIGA (less than 100), tell your administrator to check for the other users. If you have cross the 100/150 GIGA you can do two things. First one, you can copy, temporarily, some of your stuff on \textbf{/data}. If you don't already have a directory for you, create it, and then copy there your files. Important, do not move (\textbf{mv}) files or directory from your Virgo account on \textbf{data}, but copy them, and then you can delete them from your account on Virgo. This is because you are copying to a different disc and the process might take few minutes. The second thing that you can do is to move part of your work (maybe something that you will need in the near future, but not immediately) on a virtual ``Dropbox''. What is a virtual Dropbox? It's an object storage where you can copy stuff, delete it from your account, and then if you need it again download it. Pay attention! You will not have a proper filesystem there, so no directories, no subdirectories. This is the first thing to keep in mind. Here I will do a brief HowTo on how to copy and manage files in relation with this object storage. 
+where the important stuff is in \textbf{/dev/md4} i.e. the \textbf{/home} directory of Virgo, and \textbf{/dev/md5} i.e \textbf{/data}, a directory where you can copy files/directories related to closed papers. If you notice that the /home is $99\%$, chech your usage of space on disc. If you are using not so many GIGA (less than 100), tell your administrator to check for the other users. If you have cross the 100/150 GIGA you can do two things. First one, you can copy, temporarily, some of your stuff on \textbf{/data}. If you don't already have a directory for you, create it, and then copy there your files. Important, do not move (\textbf{mv}) files or directory from your Virgo account on \textbf{data}, but copy them, and then you can delete them from your account on Virgo. This is because you are copying to a different disc and the process might take few minutes. The second thing that you can do is to move part of your work (maybe something that you will need in the near future, but not immediately) on a virtual ``Dropbox''. What is a virtual Dropbox? It's an object storage where you can copy stuff, delete it from your account, and then if you need it again download it. Pay attention! You will not have a proper filesystem there, so no directories, no subdirectories. This is the first thing to keep in mind. Here I will do a brief HowTo on how to copy and manage files in relation with this object storage.
 
 \subsection{Object storage, s3 and s3cmd}
-Due to the fact that this object storage does not have a real filesystem, you need something that allow you to manage files. This something are actually two instruments: s3 and s3cmd \url{https://s3tools.org/s3cmd}. Both of them should already be installed on your Virgo account. What is the difference between s3 and s3cmd? With s3 you can copy only one file at the time, which is very painful! To overcome this problem, you can use s3cmd, so in this brief overview, I'll start from this one. First, you have to copy the \textbf{.s3cfg} file that is in the directory submitbin, in your \textbf{/home}. You can find at \url{https://s3tools.org/usage} a list of useful commands, while here I'm showing you only the basic ones, just to start. 
+Due to the fact that this object storage does not have a real filesystem, you need something that allow you to manage files. This something are actually two instruments: s3 and s3cmd \url{https://s3tools.org/s3cmd}. Both of them should already be installed on your Virgo account. What is the difference between s3 and s3cmd? With s3 you can copy only one file at the time, which is very painful! To overcome this problem, you can use s3cmd, so in this brief overview, I'll start from this one. First, you have to copy the \textbf{.s3cfg} file that is in the directory submitbin, in your \textbf{/home}. You can find at \url{https://s3tools.org/usage} a list of useful commands, while here I'm showing you only the basic ones, just to start.
 
 \begin{verbitemize}[\vbsetup]
-s3cmd mb s3://bucket_name 
-s3cmd ls s3://bucket_name 
-s3cmd ls 
-s3cmd put directory_of_files_you_want_to_put_on_s3/$^{*}$ s3://bucket_name 
-s3cmd del s3://bucket_name/file_name_you_want_to_delete 
-s3cmd get s3://bucket_name/filenames directory_where_you_want_to_put_files 
+s3cmd mb s3://bucket_name
+s3cmd ls s3://bucket_name
+s3cmd ls
+s3cmd put directory_of_files_you_want_to_put_on_s3/$^{*}$ s3://bucket_name
+s3cmd del s3://bucket_name/file_name_you_want_to_delete
+s3cmd get s3://bucket_name/filenames directory_where_you_want_to_put_files
 \end{verbitemize}
-With the \textbf{mb} command you are creating the bucket, with \textbf{ls} you can see the contents of a bucket (if you are specifying the bucket name) or all the created buckets. By typing \textbf{put} you are putting a file/more files (if you put $^{*}$ you are copying all the files in the directory) in the created bucket onto s3. For example:  \begin{verbatim} s3cmd put test1/$^{*}$ s3://prova1benni \end{verbatim} is putting all the files of the directory test1 in the bucket prova1benni. \textbf{del} allows you to delete a/more file/s (instead of the file name, if you want to delete all the files in the directory you can put the $^{*}$). Finally with \textbf{get} you are downloading from ``Dropbox''Äù the files that are in the bucket. You can download all the files that are in the bucket, the ones with a special name $^{*}$.dat, one single file, whatever you want. 
+With the \textbf{mb} command you are creating the bucket, with \textbf{ls} you can see the contents of a bucket (if you are specifying the bucket name) or all the created buckets. By typing \textbf{put} you are putting a file/more files (if you put $^{*}$ you are copying all the files in the directory) in the created bucket onto s3. For example:  \begin{verbatim} s3cmd put test1/$^{*}$ s3://prova1benni \end{verbatim} is putting all the files of the directory test1 in the bucket prova1benni. \textbf{del} allows you to delete a/more file/s (instead of the file name, if you want to delete all the files in the directory you can put the $^{*}$). Finally with \textbf{get} you are downloading from ``Dropbox''ÔøΩÔøΩ the files that are in the bucket. You can download all the files that are in the bucket, the ones with a special name $^{*}$.dat, one single file, whatever you want.
 
-Another problem that we face, is that in this virtual place each files needs to have its proper and unique name. If for example, Tizio put there a file named ``test\_00120'' and Caio put there another file named ``test\_00120'' (same name, different file), Caio will overwrite the file of Tizio. So the best thing is that when you run your simulation you choose some unique names, like ``caio\_testgas\_00120'' and ``tizio\_testgas\_00120'', differentiating them with your username. It is also recommended to add to the name of your simulations (and so of your \textbf{.setup}, see Section ) also other details, for example the mass of your disc/planet or whatever you want. For the files that you have already accumulated, if they have similar names, or you're not sure they will be different from the files of someone else, you can do two things. 
-You can create a script in bash in order to change the name of your dumps in something like: 
+Another problem that we face, is that in this virtual place each files needs to have its proper and unique name. If for example, Tizio put there a file named ``test\_00120'' and Caio put there another file named ``test\_00120'' (same name, different file), Caio will overwrite the file of Tizio. So the best thing is that when you run your simulation you choose some unique names, like ``caio\_testgas\_00120'' and ``tizio\_testgas\_00120'', differentiating them with your username. It is also recommended to add to the name of your simulations (and so of your \textbf{.setup}, see Section ) also other details, for example the mass of your disc/planet or whatever you want. For the files that you have already accumulated, if they have similar names, or you're not sure they will be different from the files of someone else, you can do two things.
+You can create a script in bash in order to change the name of your dumps in something like:
 \begin{verbatim}
 Caio_sim1_gas_0000numbers
 Caio_sim2_gas_0000numbers
 Caio_sim1_dust_0000numbers
 \end{verbatim}
-or something like that. The other thing that you can do (the fastest and easiest) if you don't have time to do the first one, is to create a new bucket for each of your simulations. 
-For example: 
+or something like that. The other thing that you can do (the fastest and easiest) if you don't have time to do the first one, is to create a new bucket for each of your simulations.
+For example:
 \begin{verbatim}
 s3cmd mb s3://caio_sim1_gas_otherdetails
 s3cmd mb s3://caio_sim1_dust_otherdetails
 s3cmd mb s3://tizio_sim1_gas_otherdetails
 s3cmd mb s3://sempronio_sim1_dust_otherdetails
 \end{verbatim}
-In this way, they are unique to you and to everyone else. 
-If now you want to try, just to be sure that everything is going well, start by copying on the object storage the files that you care less, so that if something goes wrong, it's not a big deal. So, create the bucket, put the file/files there, delete the files on your Virgo account, download them again from ``Dropbox''. If this work, you're ok!  
+In this way, they are unique to you and to everyone else.
+If now you want to try, just to be sure that everything is going well, start by copying on the object storage the files that you care less, so that if something goes wrong, it's not a big deal. So, create the bucket, put the file/files there, delete the files on your Virgo account, download them again from ``Dropbox''. If this work, you're ok!
 
 If you just want to copy stuff from your account to ``dropbox'' this is all you need to know by now. If you want to do something more, you can decide to set up \textsc{phantom} (probably the code that you will be use if you are reading this tutorial, see Section \ref{getphant}) in a way that as soon as a dump (result file) is created, it is automatically put onto the dropbox. But to do so you will have to wait a bit more, I'm still working on it. So if you really want to have this feature implemented in your \textsc{phantom} write me (benedetta.veronesi@unimi.it) and I will update you.
 However, to use the object storage in the PRO mode, you need s3. As I said before, you should already have it installed, check it by typing s3. If you have it you can add in your \textbf{.bashrc} file these few lines:
 \begin{verbatim}
 ### access to s3
 export S3_HOSTNAME=rgw.fisica.unimi.it
-export S3_ACCESS_KEY_ID="7BFN8CHAQJ42P5R15E86"         
+export S3_ACCESS_KEY_ID="7BFN8CHAQJ42P5R15E86"
 # S3 access key ID (required)
-export S3_SECRET_ACCESS_KEY="hJifikhLVlIZWPfDWpPKTIB2bP9Kwbe0b5Y58hja"     
-# S3 secret access key 
+export S3_SECRET_ACCESS_KEY="hJifikhLVlIZWPfDWpPKTIB2bP9Kwbe0b5Y58hja"
+# S3 secret access key
 
-export S3_BUCKET=bucket_name_where_you_want_to_put_the_dumps_of_your_simulation     
+export S3_BUCKET=bucket_name_where_you_want_to_put_the_dumps_of_your_simulation
 export PHANTOM_DUMP_COPY_OUT_CALLOUT="./put_dump_onto_s3.sh"
 \end{verbatim}
-Remember to source the .bashrc after modifying it. I want to highlight that if you want, you can use s3 instead of s3cmd also for just copying files. To do that, you still need at least the first three lines in your \textbf{.bashrc} file. 
+Remember to source the .bashrc after modifying it. I want to highlight that if you want, you can use s3 instead of s3cmd also for just copying files. To do that, you still need at least the first three lines in your \textbf{.bashrc} file.
 
 
 
 \subsection{Getting PHANTOM}\label{getphant}
 You have two possibilities: downloading the tarball, and downloading the developer version.
 
-For the first, download the tarball from the \url{https://phantomsph.bitbucket.io/#download}. You can do it directly on \textsc{virgo} without copying it from your computer using 
+For the first, download the tarball from the \url{https://phantomsph.bitbucket.io/#download}. You can do it directly on \textsc{virgo} without copying it from your computer using
 \begin{verbatim}
-wget https://phantomsph.bitbucket.io/releases/phantom-v0.9.tar.gz 
+wget https://phantomsph.bitbucket.io/releases/phantom-v0.9.tar.gz
 \end{verbatim}
 be careful to download the most updated release (change phantom-v0.9.tar.gz with the most recent one).
 
@@ -308,8 +308,8 @@ make
 make setup
 make analysis
 \end{verbatim}
-to have the three main executables (many other executables can be compiled for different purposes). The local Makefile copies the executables in the folder where you type make. 
-It might happen that if you are trying to compile the executables with a large number of particles ($N_{\rm part}\gtrsim 2.5\times 10^6$), you might need to set 
+to have the three main executables (many other executables can be compiled for different purposes). The local Makefile copies the executables in the folder where you type make.
+It might happen that if you are trying to compile the executables with a large number of particles ($N_{\rm part}\gtrsim 2.5\times 10^6$), you might need to set
 \begin{verbatim}
 ulimit -s unlimited
 \end{verbatim}
@@ -332,7 +332,7 @@ this will prompt an interactive menu. The output of this first call of ./phantom
 \begin{verbatim}
 ./phantomsetup <nameofsim>
 \end{verbatim}
-in presence of a nameofsim.setup file in the folder will produce the first dump, named nameofsim\_00000.tmp, it is a binary file (to read it use ssplash nameofsim\_00000.tmp, see Section \ref{phansplash}). As a general rule, if you are planning to make several simulations with very similar parameters, I suggest to go through the interactive setup once and then to copy the .setup file manually or using a script (in Section \ref{pspacespan} an example of a script that I use to make faster the setting up of multiple simulations). 
+in presence of a nameofsim.setup file in the folder will produce the first dump, named nameofsim\_00000.tmp, it is a binary file (to read it use ssplash nameofsim\_00000.tmp, see Section \ref{phansplash}). As a general rule, if you are planning to make several simulations with very similar parameters, I suggest to go through the interactive setup once and then to copy the .setup file manually or using a script (in Section \ref{pspacespan} an example of a script that I use to make faster the setting up of multiple simulations).
 
 Beside the creation of the first dump. A file nameofsim.in is created after you run for the second time \textsc{phantomsetup} (or first time if the .setup file is already present in the directory). I will discuss this file in the next section.
 
@@ -341,7 +341,7 @@ Beside the creation of the first dump. A file nameofsim.in is created after you 
 The file nameofsim.in mentioned in the previous section contains some technical specifications of the simulation, the most important are: the number of the equation of state (ieos), options controlling viscosity (I will discuss this briefly in a dedicated Section \ref{viscosity}), options controlling the dust, duration of the simulation and other output options. Most of these quantities are set automatically by the setup, which already contains some of these information, in other situations you need to change it manually if you need them to be different.
 If you need to set up a large number of simulations you might wish to edit the setup source in order to have the .in written with your preferences (this will avoid the manual editing of all the .in files). Another trick, that however works only for the output options, is to put a .in file in the folder with the output options already set, they will not change when running \textsc{phantomsetup}.
 
-It's time to run your simulation! There are three possibilities: 
+It's time to run your simulation! There are three possibilities:
 
 \begin{itemize}
 \item[1.] You run your simulation on \textsc{virgo}: 16 core machine, one simulation at a time, with two you halve the computational power per simulation. this is a good choice if you need to make some tests.
@@ -457,7 +457,7 @@ The best workaround to this is to break the simulation in smaller and shorter jo
 
 You can use the script submit.sh in the submitbin folder you downloaded in Section \ref{getphant} to make your simulation an array of shorter jobs in order to avoid the situation we just described above.
 After the submission of the job, the script checks every few minutes if the file out.ClusterID exist and if something is written inside it;
-if yes, it means that your simulation has finished and is ready for resubmission; the script checks for the number of the last dump and edit the submission\_file for the new submission. 
+if yes, it means that your simulation has finished and is ready for resubmission; the script checks for the number of the last dump and edit the submission\_file for the new submission.
 
 How do we force the simulation to become a set of shorter jobs? Instead of running the simulation until ``tmax'' is reached, \textsc{phantom} allows you to stop your simulation after a given amount of wall time, after a given number of dumps is produced or after a given number of steps is computed. You can achieve this setting your nameofsim.in file as follows:
 \begin{verbatim}
@@ -477,10 +477,10 @@ How do we force the simulation to become a set of shorter jobs? Instead of runni
        nfulldump =           1    ! full dump every n dumps
         iverbose =           0    ! verboseness of log \
                                     (-1=quiet 0=default 1=allsteps 2=debug 5=max)
-\end{verbatim} 
+\end{verbatim}
 twallmax=012:00 means that if phantom understand that with the next dump the job will exceed 12 hours of wall time the simulation stop, and Condor transfer back the output to your machine; nmaxdump=10 means that no matter if you reach 12 hours, if you do 10 dumps in less time, your simulation stops and you have back your dump. \textbf{NB:} if after the submission your simulation takes more than 12 hours two things might have happened: first, you have been evicted during the first 12 hours and your simulation was restarted; in this case you can simply leave it like it is, in the worst case scenario you have lost the first 11 h 59' 59'', the simulation will restart automatically, it will simply take a bit more than expected. Second, the first dump took longer than 12 hours implying that as soon as \textsc{phantom} will produce the first dump, Condor will deliver back the output; in this case you should change the ``dtmax'' variable to have that less simulation time passes between two dumps, or setting an ``nmax'' to limit the number of timesteps between two dumps (if you make too many timesteps per dump you are having anyway some problems with the dynamic range, so if you realize that this is the problem check carefully the parameters you chose).
 
-Now that you modified your .in file, after you generated the submission file (as explained above) you submit your job typing 
+Now that you modified your .in file, after you generated the submission file (as explained above) you submit your job typing
 \begin{verbatim}
 nohup submit.sh <N> &
 \end{verbatim}
@@ -516,7 +516,7 @@ will produce an output which should look like this:
 \begin{verbatim}
 ven 29 dic 2017, 15.30.32, CET: 2096908 \
 /home/unimi/enrico.ragusa/simulazioni/2ndCQTau/009q20au1mm2 submit.sh 50
-ven 29 dic 2017, 15.31.00, CET: 2097054 \ 
+ven 29 dic 2017, 15.31.00, CET: 2097054 \
 /home/unimi/enrico.ragusa/simulazioni/2ndCQTau/006q20au1mm2 submit.sh 50
 ven 29 dic 2017, 15.31.20, CET: 2097082 \
 /home/unimi/enrico.ragusa/simulazioni/2ndCQTau/003q20au1mm2 submit.sh 50
@@ -548,7 +548,7 @@ this will list all the processes containing ``submit.sh'' active on the machine 
 UPDATE: This is not anymore useful for new users since \textsc{virgo} has been added to the superpool of which \textsc{gaspare} is part. Now all the jobs submitted using condor from \textsc{virgo} run on a very large pool of machines.
 
 To obtain an account on \textsc{gaspare} you need to email Franco Leveraro, a guy at the computational centre.
-I have not administration privileges on this machine so the environment settings that are granted on \textsc{virgo} for all the user need to be done by each user on their /home directory. First thing is to change your .bashrc file to include the following environment variables that are automatically set on \textsc{virgo}. 
+I have not administration privileges on this machine so the environment settings that are granted on \textsc{virgo} for all the user need to be done by each user on their /home directory. First thing is to change your .bashrc file to include the following environment variables that are automatically set on \textsc{virgo}.
 \begin{verbatim}
 export SYSTEM=gfortran
 export OMP_NUM_THREADS=32
@@ -562,7 +562,7 @@ The submission consists in the same procedure as on \textsc{virgo} (described in
 \begin{verbatim}
 export LIBRARY_PATH=$LIBRARY_PATH:$HOME/submitbin/lib
 \end{verbatim}
-For completeness, in case in the future you will compile jobs with dynamic linking on \textsc{gaspare} for other purposes, add the following paths to the LD\_LIBRARY\_PATH variable, to do that copy the following line in your .bashrc 
+For completeness, in case in the future you will compile jobs with dynamic linking on \textsc{gaspare} for other purposes, add the following paths to the LD\_LIBRARY\_PATH variable, to do that copy the following line in your .bashrc
 \begin{verbatim}
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib64
 \end{verbatim}
@@ -577,10 +577,10 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/lib
 export LIBRARY_PATH=$LIBRARY_PATH:$HOME/submitbin/lib
 \end{verbatim}
 
-How many cores should I require here? 
+How many cores should I require here?
 If you go to your submitbin directory, you will find the template for the submission\_file, named with great fantasy submission\_file\_template. There I suggest you to change the variables \textbf{OMP\_NUM\_THREADS = 16} and \textbf{requested\_cpus = 16}. In this way you will match the requirements of a very large number of machines. If you require more cores, only few machines will be able to satisfy your requirement with the result that the speed up you would gain with the higher number of cores is completely vanished by the time you wait in the queue for your job to start.
 
-Finally it is important to say that despite two of the machines \textsc{melchiorre} \textsc{baldassarre} are equipped with 64 cores, the tests I ran on these machines showed that the parallelization efficiency decreases rapidly above 32 cores, probably due to the fact that they are 32 physical cores hyperthreaded to 64. 
+Finally it is important to say that despite two of the machines \textsc{melchiorre} \textsc{baldassarre} are equipped with 64 cores, the tests I ran on these machines showed that the parallelization efficiency decreases rapidly above 32 cores, probably due to the fact that they are 32 physical cores hyperthreaded to 64.
 
 \subsubsection{How to install matplotlib on GASPARE}\label{viscosity}
 
@@ -598,29 +598,29 @@ export PYTHONPATH=$HOME/lib/pythonlib/lib/python2.7/site-packages
 \end{verbatim}
 
 \section{SLURM on Indaco}
-Recently we gained some extra computational time on Indaco. Indaco is a new ``technological platform'' of the University of Milan. By now, we have a limited (free) amount of computational time and space. 
+Recently we gained some extra computational time on Indaco. Indaco is a new ``technological platform'' of the University of Milan. By now, we have a limited (free) amount of computational time and space.
 
 Here I am briefly explaining you how to run \textsc{phantom} on Indaco with the queue gestor named Slurm. Before starting, you can login on Indaco after having sent a request at this website \url{http://www.indaco.unimi.it/index.php/registrazione-unimi/}. If you are a new student you will have to ask Giuseppe (Lodato) to add your name to the astro\_disc project. Then, if you are a unimi student you can access to Indaco by using your credentials. Once you have logged in, go inside \textbf{astro\_disc/scratch}. This will be your work directory, and by typing \textbf{pwd} you can see its path. Here you can download or copy \textsc{phantom} from your pre-existent account on \textsc{virgo} (\textbf{scp -r command}).
 Once you have copied it, create a directory for your simulation inside \textbf{/scratch} and here compile \textsc{phantom} as you have done on \textsc{virgo} but without the flag \textbf{-static} in the \textbf{Makefile\_defaults\_gfortran}.  Then you need to create a file with the name of your simulation \textbf{myjob.slurm}
 \begin{verbatim}
 #!/bin/bash
-#SBATCH -o /gpfs/home/users/username/astro_disc/scratch/mydir/myjob.\%j.\%N.out 
-#SBATCH -D /gpfs/home/users/username/astro_disc/scratch/     
-#SBATCH -J job\_name 
+#SBATCH -o /gpfs/home/users/username/astro_disc/scratch/mydir/myjob.\%j.\%N.out
+#SBATCH -D /gpfs/home/users/username/astro_disc/scratch/
+#SBATCH -J job\_name
 #SBATCH --get-user-env
 #SBATCH -p light
 #SBATCH --nodes=1							# with openMP you can use only one node
 #SBATCH -c 32                   						# Number of cores per task
 #SBATCH --mem-per-cpu 1000     					#  Mem for each core
 #SBATCH --mail-type=ALL
-#SBATCH --mail-user=your_email 	#to receive info about the status of your job  
+#SBATCH --mail-user=your_email 	#to receive info about the status of your job
 #SBATCH --time=1-00:00:00						# time you want your simulation to run -- maximum 1 day
 #SBATCH --account=fisica
 
 module load Mlnx/hpcx      # you are loading the libraries for openMP compiled with gfortran
 
 cd /gpfs/home/users/username/astro_disc/scratch/mydir
-export OMP_NUM_THREADS=32 
+export OMP_NUM_THREADS=32
 srun ./phantom myjob.in 			#where the myjob.in is the file created by Phantom
 \end{verbatim}
 Here \textbf{mydir} and  \textbf{myjob} are the name of the directory of your simulations and of the simulation you are about to run. To understand better what are all the different entries of this file you can go there \url{http://www.indaco.unimi.it/index.php/guide/#cmtoc_anchor_id_5}.
@@ -632,12 +632,12 @@ If you want to check the status of your job, type
 \begin{verbatim}
 scontrol show job ID_job
 \end{verbatim}
-moreover, in the \textbf{myjob.\%j.\%N.out} file, the \%N will tell you the name of the node on which the job is running, so if you want you can connect to it by \textbf{ssh} and check with \textbf{top} if the job is really ok. A very nice thing is that by running a job with slurm, you will have immediate and direct access to each \textsc{phantom} dump as soon as it is created, while with \textsc{HTCondor} you need to wait the \textbf{twall} you have specified in the \textbf{file.in}, as explained in Sec.\ref{condvirgo}. Another interesting point of running job with \textsc{slurm} is that once you get the computational time you have asked for (\textbf{\#SBATCH --time=1-00:00:00}), you will not be suspended or evicted, like it happens with HTCondor on \textsc{virgo} and \textsc{gaspare}. 
+moreover, in the \textbf{myjob.\%j.\%N.out} file, the \%N will tell you the name of the node on which the job is running, so if you want you can connect to it by \textbf{ssh} and check with \textbf{top} if the job is really ok. A very nice thing is that by running a job with slurm, you will have immediate and direct access to each \textsc{phantom} dump as soon as it is created, while with \textsc{HTCondor} you need to wait the \textbf{twall} you have specified in the \textbf{file.in}, as explained in Sec.\ref{condvirgo}. Another interesting point of running job with \textsc{slurm} is that once you get the computational time you have asked for (\textbf{\#SBATCH --time=1-00:00:00}), you will not be suspended or evicted, like it happens with HTCondor on \textsc{virgo} and \textsc{gaspare}.
 
 
 \section{SPLASH and PHANTOMANALYSIS}\label{phansplash}
 
-\textsc{splash} is the interactive plotter that is able to read and visualize the binary dump files produced by \textsc{phantom}. 
+\textsc{splash} is the interactive plotter that is able to read and visualize the binary dump files produced by \textsc{phantom}.
 \textsc{virgo} is periodically updated to the latest version of \textsc{splash}, however on \textsc{gaspare} you will need to install it on your home directory: follow the instructions at \url{http://users.monash.edu.au/~dprice/splash/download.html}. If you don't manage to do that, ask me. You can copy my executables and libraries directly in your \$HOME/bin folder.
 
 To make some practice with reading and elaborating the output using \textsc{splash} and \textsc{phantomanalysis}, in the \textsc{virgo} folder /usr/local/phantom/simExamp you will find 10 dumps of a numerical simulation.
@@ -649,7 +649,7 @@ ssplash testPhantBin_00010
 \end{verbatim}
 this will prompt an interactive menu: inserting 2 $<$enter$>$, 1 $<$enter$>$, 6 $<$enter$>$, $<$enter$>$, $<$enter$>$ visualizes the density distribution of the 10th dump as a colour plot.
 
-The \textsc{phantomanalysis} allows the user to extract some elaboration of the data contained in the dumps (e.g. the angular momentum of a given disc annulus, the accretion rate at a given radius). 
+The \textsc{phantomanalysis} allows the user to extract some elaboration of the data contained in the dumps (e.g. the angular momentum of a given disc annulus, the accretion rate at a given radius).
 \begin{verbatim}
 ./phantomanalysis testPhantBin_00010
 \end{verbatim}
@@ -769,7 +769,7 @@ fi
 generatesubfile.sh ""$MASSR"q"$SEMAX"au"$SIZE""$UNIT""
 \end{verbatim}
 
-Copied here you will find the templSmall.setup, which is one of the template .setup file called in the script. You should notice that the massratio, separation and grain size have been changed to the flags MASSRQ, SEMAX and SIZE, so that calling sed with the substitution option allows you to substitute the flag with the value you desire. 
+Copied here you will find the templSmall.setup, which is one of the template .setup file called in the script. You should notice that the massratio, separation and grain size have been changed to the flags MASSRQ, SEMAX and SIZE, so that calling sed with the substitution option allows you to substitute the flag with the value you desire.
 
 \begin{verbatim}
 # input file for dustydisc setup routine
