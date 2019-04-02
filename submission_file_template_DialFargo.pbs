@@ -3,13 +3,13 @@
 #PBS -A PROJECTID
 #PBS -l nodes=1:ppn=CORES
 #PBS -N JOBNAME
-#PBS -o NAMEFILE.in.pbsout
+#PBS -o NAMEFILE.pbsout
 #PBS -j oe
 #PBS -m e
 #PBS -M enrico.ragusa@leicester.ac.uk
 #PBS -l walltime=TIME:00:00
-#PBS -l mem=32G
-## phantom jobs can be restarted:
+#PBS -l mem=5G
+## jobs can be restarted:
 #PBS -r y
 
 cd $PBS_O_WORKDIR
@@ -23,13 +23,12 @@ echo Time is `date`
 echo Directory is `pwd`
 
 module load intel/compilers/18
+module load intel/mpi/18 
 
 export OMP_SCHEDULE="dynamic"
 export OMP_NUM_THREADS=CORES
 export OMP_STACKSIZE=1024m
 ulimit -s unlimited
 
-echo "starting phantom run..."
-export outfile=`grep logfile "NAMEFILE.in" | sed "s/logfile =//g" | sed "s/\\!.*//g" | sed "s/\s//g"`
-echo "writing output to $outfile"
-./phantom NAMEFILE.in > $outfile 
+echo "starting fargo run..."
+mpirun -np CORES ./fargo3d -m setups/mysetup/NAMEFILE.par
