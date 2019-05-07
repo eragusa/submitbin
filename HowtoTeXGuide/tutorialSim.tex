@@ -20,6 +20,11 @@
 \usepackage{natbib}
 \usepackage{mathrsfs}
 \usepackage{textcomp}
+\usepackage[formats]{listings}
+
+\lstdefineformat{R}{~=\( \sim \)}
+\lstset{basicstyle=\ttfamily,format=R}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \pagestyle{fancy}
 \setlength{\headheight}{14pt}
@@ -600,12 +605,36 @@ export PYTHONPATH=$HOME/lib/pythonlib/lib/python2.7/site-packages
 \section{SLURM on Indaco}
 Recently we gained some extra computational time on Indaco. Indaco is a new ``technological platform'' of the University of Milan. By now, we have a limited (free) amount of computational time and space.
 
-Here I am briefly explaining you how to run \textsc{phantom} on Indaco with the queue gestor named Slurm. Before starting, you can login on Indaco after having sent a request at this website \url{http://www.indaco.unimi.it/index.php/registrazione-unimi/}. If you are a new student you will have to ask Giuseppe (Lodato) to add your name to the astro\_disc project. Then, if you are a unimi student you can access to Indaco by using your credentials. Once you have logged in, go inside \textbf{astro\_disc/scratch}. This will be your work directory, and by typing \textbf{pwd} you can see its path. Here you can download or copy \textsc{phantom} from your pre-existent account on \textsc{virgo} (\textbf{scp -r command}).
-Once you have copied it, create a directory for your simulation inside \textbf{/scratch} and here compile \textsc{phantom} as you have done on \textsc{virgo} but without the flag \textbf{-static} in the \textbf{Makefile\_defaults\_gfortran}.  Then you need to create a file with the name of your simulation \textbf{myjob.slurm}
+Here I am briefly explaining you how to run \textsc{phantom} on Indaco with the queue gestor named Slurm. Before starting, you can login on Indaco after having sent a request at this website \url{http://www.indaco.unimi.it/index.php/registrazione-unimi/}. If you are a new student you will have to ask Giuseppe (Lodato) to add your name to the astro\_disc project. Then, if you are a unimi student you can access to Indaco by using your credentials. Once you have logged in, go inside \textbf{astro\_disc/scratch}.  This is a common workspace, and it will be your work directory, (by typing \textbf{pwd} you can see its path). Here you can download or copy \textsc{phantom} from your pre-existent account on \textsc{virgo} (\textbf{scp -r command}). Name your phantom version with some details, so that you can recognise which one is yours. Also, for just a matter of order, create your own work directory with the your name. In this directory you will run your simulations. 
+Once you have copied it, create a directory \textbf{mysim} for your simulation inside \textbf{/scratch/yourname\_dir}, and here compile your version of \textsc{phantom} as you have done on \textsc{virgo} but without the flag \textbf{-static} in the \textbf{Makefile\_defaults\_gfortran}.  In order to compile \textsc{phantom} with the gfortran compiler you have to setup some environments variable. To have them defined automatically once you enter your account on Indaco, you will have to create a \textbf{.bashrc} file (check if it is already there) in the home (to be sure to be in the home just type \textbf{cd}). In this file you should put this lines: 
+\begin{verbatim}
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+        . /etc/bashrc
+fi
+#source .bashrc
+# Uncomment the following line if you 
+#don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+export SYSTEM=gfortran
+export OMP_NUM_THREADS=16
+export OMP_SCHEDULE="dynamic"
+export OMP_STACKSIZE=1000M
+ulimit -s unlimited
+\end{verbatim}
+You need to create also a \textbf{.bash\_profile} (check again if it is already there) file with this lines: 
+\begin{lstlisting}
+if [ -f ~/.bashrc ]; then
+  . ~/.bashrc
+fi
+\end{lstlisting}
+Once you have done it, then you need to create a file with the name of your simulation \textbf{myjob.slurm}
 \begin{verbatim}
 #!/bin/bash
-#SBATCH -o /gpfs/home/users/username/astro_disc/scratch/mydir/myjob.\%j.\%N.out
-#SBATCH -D /gpfs/home/users/username/astro_disc/scratch/
+#SBATCH -o /gpfs/home/users/username/astro_disc/scratch/yourname_dir/mysim/myjob.\%j.\%N.out
+#SBATCH -D /gpfs/home/users/username/astro_disc/scratch/yourname_dir/mysim
 #SBATCH -J job\_name
 #SBATCH --get-user-env
 #SBATCH -p light
@@ -619,11 +648,12 @@ Once you have copied it, create a directory for your simulation inside \textbf{/
 
 module load Mlnx/hpcx      # you are loading the libraries for openMP compiled with gfortran
 
-cd /gpfs/home/users/username/astro_disc/scratch/mydir
+cd /gpfs/home/users/username/astro_disc/scratch/yourname_dir/mysim
 export OMP_NUM_THREADS=32
 srun ./phantom myjob.in 			#where the myjob.in is the file created by Phantom
 \end{verbatim}
-Here \textbf{mydir} and  \textbf{myjob} are the name of the directory of your simulations and of the simulation you are about to run. To understand better what are all the different entries of this file you can go there \url{http://www.indaco.unimi.it/index.php/guide/#cmtoc_anchor_id_5}.
+Here \textbf{mysim} and  \textbf{myjob} are the name of the directory of your simulations and of the simulation you are about to run. Remember to change all the \textbf{yourname\_dir,mysim,myjob,your\_email,job\_name,username}  you find in the example. 
+To understand better what are all the different entries of this file you can go there \url{http://www.indaco.unimi.it/index.php/guide/#cmtoc_anchor_id_5}.
 To submit the job you have to type
 \begin{verbatim}
 sbatch myjob.slurm
