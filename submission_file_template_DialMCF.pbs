@@ -1,0 +1,34 @@
+#!/bin/bash
+## PBS Job Submission Script, created by "make qscript" Fri May 18 01:17:17 BST 2018
+#PBS -A PROJECTID
+#PBS -l nodes=1:ppn=CORES
+#PBS -N mcfostJOBNAME
+#PBS -o mcfost_out
+#PBS -j oe
+#PBS -m e
+#PBS -M enrico.ragusa@leicester.ac.uk
+#PBS -l walltime=TIME:00:00
+#PBS -l mem=1G
+## phantom jobs can be restarted:
+#PBS -r y
+
+cd $PBS_O_WORKDIR
+echo "PBS_O_WORKDIR is $PBS_O_WORKDIR"
+echo "PBS_JOBNAME is $PBS_JOBNAME"
+env | grep PBS
+cat $PBS_NODEFILE > nodefile
+echo "HOSTNAME = $HOSTNAME"
+echo "HOSTTYPE = $HOSTTYPE"
+echo Time is `date`
+echo Directory is `pwd`
+
+module load intel/compilers/18
+
+export OMP_SCHEDULE="dynamic"
+export OMP_NUM_THREADS=CORES
+export OMP_STACKSIZE=1024m
+ulimit -s unlimited
+
+mcfost ref3.0_3D.para -phantom JOBNAME
+mcfost ref3.0_3D.para -img 2.0 -phantom JOBNAME
+mcfost ref3.0_3D.para -img 1300.0 -phantom JOBNAME
