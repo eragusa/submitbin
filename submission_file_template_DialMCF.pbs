@@ -7,8 +7,8 @@
 #PBS -j oe
 #PBS -m e
 #PBS -M enrico.ragusa@leicester.ac.uk
-#PBS -l walltime=TIME:00:00
-#PBS -l mem=1G
+#PBS -l walltime=00:30:00
+#PBS -l mem=15G
 ## phantom jobs can be restarted:
 #PBS -r y
 
@@ -29,6 +29,6 @@ export OMP_NUM_THREADS=CORES
 export OMP_STACKSIZE=1024m
 ulimit -s unlimited
 
-mcfost ref3.0_3D.para -phantom JOBNAME
-mcfost ref3.0_3D.para -img 2.0 -phantom JOBNAME
-mcfost ref3.0_3D.para -img 1300.0 -phantom JOBNAME
+mcfost ref3.0_3D.para -phantom JOBNAME -mol
+mcfost ref3.0_3D.para -img 1300 -phantom JOBNAME
+mcfost ref3.0_3D.para -img 8000 -phantom JOBNAME

@@ -8,7 +8,7 @@
 #PBS -m e
 #PBS -M enrico.ragusa@leicester.ac.uk
 #PBS -l walltime=TIME:00:00
-#PBS -l mem=32G
+#PBS -l mem=16G
 ## phantom jobs can be restarted:
 #PBS -r y
 

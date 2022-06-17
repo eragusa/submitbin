@@ -5,7 +5,10 @@ JNAME=$NAME
 CORES=$2
 TIME=$3
 NPAR=3
-PROJECTID="dp119"
+PROJECTID="dp190"
+if [ $# -eq 4 ]; then
+    PROJECTID=$4    
+fi
 
 if [ "$#" -lt $NPAR ]; then
 

@@ -10,7 +10,7 @@ PROJECTID="dp119"
 if [ "$#" -lt $NPAR ]; then
 
   CORES=36;
-  TIME=1;
+  TIME=12;
   sed 's/NAMEFILE/'$NAME'/' ~/submitbin/submission_file_template_DialMCF.pbs| sed 's/JOBNAME/'$JNAME'/'|sed 's/TIME/'$TIME'/'|sed 's/CORES/'$CORES'/'|sed 's/PROJECTID/'$PROJECTID'/' > subfile.pbs
 
 fi
