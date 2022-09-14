@@ -1,0 +1,39 @@
+#!/bin/bash
+#
+### variables SGE
+### shell du job
+#$ -S /bin/bash
+### nom du job (a changer)
+#$ -N JOBNAME
+### file d'attente (a changer)
+#$ -q PROJECTID
+### parallel environment & nb cpu (NSLOTS)
+#$ -pe openmp32 CORES
+### charger l'environnement utilisateur pour SGE
+#$ -cwd
+### exporter les variables d'environnement sur tous les noeuds d'execution
+#$ -V
+#$ -l h_rt=TIME
+#$ -l s_rt=TIME
+
+###### mails en debut et fin d'execution
+######$ -m 
+
+echo "starting phantom run..."
+export outfile=`grep logfile *.in| sed "s/logfile =//g" | sed "s/\\!.*//g" | sed "s/\s//g"`
+echo "writing output to $outfile"
+
+#./test.exe >& $outfile 
+./phantom NAMEFILE.in >& $outfile
+
+### recuperation des resultats à la fin du calcul
+#/bin/cp -- "${SCRATCHDIR}/*" "${HOMEDIR}/"
+				        
+### delete le dossier sur /scratch
+#if [[ "${SCRATCHDIR}" =~ scratch ]]
+#then
+#	/bin/rm -rf "${SCRATCHDIR}"
+#fi
+					  
+###
+# fin
