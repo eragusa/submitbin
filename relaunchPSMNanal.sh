@@ -4,7 +4,7 @@ NCORES=1
 NHOURS="10:00:00"
 PROJECTID="Epyc7702deb512"
 ORIGDIR=$PWD
-SUBFILE='subanal.sge'
+SUBFILE='subanal.slurm'
 
 for path in $@; do
 
@@ -16,7 +16,7 @@ for path in $@; do
      sed 's/python $HOME\/pyscripts\/NonResoBin\/cratioSeriesA.py .*/python $HOME\/pyscripts\/NonResoBin\/cratioSeriesA.py trunc*_*/' < $SUBFILE > provSub
      mv provSub $SUBFILE
      #echo "python $HOME/pyscripts/NonResoBin/cratioSeriesA.py *[0]" >> $SUBFILE
-     qsub $SUBFILE
+     sbatch $SUBFILE
      sleep 1
      echo "Launched sim in $path"
      cd $ORIGDIR
