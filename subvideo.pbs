@@ -1,0 +1,36 @@
+#!/bin/bash
+## PBS Job Submission Script, created by "make qscript" Fri May 18 01:17:17 BST 2018
+#PBS -A dp190
+#PBS -l nodes=1:ppn=1
+#PBS -N videomaking
+#PBS -o analysis.pbsout
+#PBS -j oe
+#PBS -m e
+#PBS -M enrico.ragusa@leicester.ac.uk
+#PBS -l walltime=01:00:00
+#PBS -l mem=16G
+## phantom jobs can be restarted:
+#PBS -r y
+
+cd $PBS_O_WORKDIR
+echo "PBS_O_WORKDIR is $PBS_O_WORKDIR"
+echo "PBS_analysis11 is $PBS_JOBNAME"
+env | grep PBS
+cat $PBS_NODEFILE > nodefile
+echo "HOSTNAME = $HOSTNAME"
+echo "HOSTTYPE = $HOSTTYPE"
+echo Time is `date`
+echo Directory is `pwd`
+
+module load intel/compilers/18
+
+export OMP_SCHEDULE="dynamic"
+export OMP_NUM_THREADS=1
+export OMP_STACKSIZE=1024m
+ulimit -s unlimited
+
+mkdir -p movie
+splash -p trunc*_0* -r 6 -dev /png
+mv splash_*png movie
+cd movie 
+~/splash/scripts/movie.sh
