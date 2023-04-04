@@ -2,12 +2,12 @@
 ## PBS Job Submission Script, created by "make qscript" Fri May 18 01:17:17 BST 2018
 #PBS -A dp190
 #PBS -l nodes=1:ppn=1
-#PBS -N videomaking
-#PBS -o analysis.pbsout
+#PBS -N subsync
+#PBS -o subsync.out
 #PBS -j oe
 #PBS -m e
 #PBS -M enrico.ragusa@leicester.ac.uk
-#PBS -l walltime=01:00:00
+#PBS -l walltime=12:00:00
 #PBS -l mem=16G
 ## phantom jobs can be restarted:
 #PBS -r y
@@ -29,10 +29,4 @@ export OMP_NUM_THREADS=1
 export OMP_STACKSIZE=1024m
 ulimit -s unlimited
 
-mkdir -p movie
-cp ../splash.* .
-splash trunc*_0* -r 6 -dev /png
-mv splash_*png movie
-cd movie
-rm movie.mp4 
-~/splash/scripts/movie.sh
+./rsyncscript.sh
